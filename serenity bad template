@@ -1,11 +1,3 @@
-Hello Kuldip,
-I attempted to connect to the QA Master Image (CXQA-W11-IMG) using RDP with my credentials (WSI\aditya.kumar), but the login failed. I am receiving the error "The logon attempt failed. Your credentials did not work."
-Due to this issue, I am unable to access the master image and proceed with the Jenkins testing.
-Could you please verify that my account has the required RDP permissions or provide the correct credentials/access?
-Thanks, Aditya Kumar
-
-
-
 
 I just downloaded serenityBDD junit stater template and i modified it in POM and deleted extra files like mvncmd gradle gradle build etc.
  This is how my project structure looks like
