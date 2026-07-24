@@ -1,4 +1,15 @@
 
+Hi Gagan Deep Sharma, Kuldip Kudhail,
+I have completed the Jenkins testing on the QA Master Image.
+The RDP login issue I reported earlier was specific to the QA Static VDI. I was able to access the other VDI successfully and completed the required testing.
+Testing Result:
+Jenkins testing completed successfully.
+No issues or impact were observed.
+All functionalities are working as expected.
+Please let me know if any further validation is required from my end.
+Thanks & Regards,
+Aditya Kumar
+
 I just downloaded serenityBDD junit stater template and i modified it in POM and deleted extra files like mvncmd gradle gradle build etc.
  This is how my project structure looks like
  Here i use Google for AUT i search launch google and searched a text.
