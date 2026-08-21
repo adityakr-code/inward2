@@ -1,0 +1,46 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+
+public class DateUtil {
+
+    public static String convertDate(String date, String outputFormat) {
+
+        List<String> inputFormats = List.of(
+                "dd/MM/yyyy",
+                "dd-MM-yyyy",
+                "dd.MM.yyyy",
+                "yyyy/MM/dd",
+                "yyyy-MM-dd",
+                "MM/dd/yyyy",
+                "MM-dd-yyyy"
+        );
+
+        LocalDate parsedDate = null;
+
+        for (String format : inputFormats) {
+            try {
+                DateTimeFormatter inputFormatter =
+                        DateTimeFormatter.ofPattern(format);
+
+                parsedDate = LocalDate.parse(date, inputFormatter);
+                break;
+
+            } catch (DateTimeParseException e) {
+                // Try next format
+            }
+        }
+
+        if (parsedDate == null) {
+            throw new IllegalArgumentException(
+                    "Unsupported date format: " + date
+            );
+        }
+
+        DateTimeFormatter outputFormatter =
+                DateTimeFormatter.ofPattern(outputFormat);
+
+        return parsedDate.format(outputFormatter);
+    }
+}
