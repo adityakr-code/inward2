@@ -1,0 +1,59 @@
+public static List<DBComparisonData> getDBComparisonData(
+        String fileName,
+        String sheetName) {
+
+    List<DBComparisonData> data = new ArrayList<>();
+
+    try (InputStream inputStream =
+                 ExcelUtil.class.getClassLoader()
+                         .getResourceAsStream(fileName)) {
+
+        if (inputStream == null) {
+            throw new RuntimeException(
+                    "Excel file not found: " + fileName);
+        }
+
+        try (Workbook workbook =
+                     WorkbookFactory.create(inputStream)) {
+
+            Sheet sheet = workbook.getSheet(sheetName);
+
+            if (sheet == null) {
+                throw new RuntimeException(
+                        "Sheet not found: " + sheetName);
+            }
+
+            // Skip header
+            for (int rowIndex = 1;
+                 rowIndex <= sheet.getLastRowNum();
+                 rowIndex++) {
+
+                Row row = sheet.getRow(rowIndex);
+
+                if (row == null || isEmptyRow(row)) {
+                    continue;
+                }
+
+                data.add(
+                    new DBComparisonData(
+                        getCellValue(row.getCell(0)),
+                        getCellValue(row.getCell(1)),
+                        getCellValue(row.getCell(2)),
+                        getCellValue(row.getCell(3)),
+                        getCellValue(row.getCell(4)),
+                        getCellValue(row.getCell(5))
+                    )
+                );
+            }
+        }
+
+    } catch (Exception e) {
+        throw new RuntimeException(
+                "Error reading DB comparison Excel", e);
+    }
+
+    return data;
+}
+
+
+---------------------------------------------
