@@ -1,3 +1,88 @@
+
+public class ExcelDataProvider {
+
+    public static Stream<Arguments> getTestData() {
+
+        String filePath = "src/test/resources/testdata/TestData.xlsx";
+
+        List<Map<String, String>> rows = readExcel(filePath);
+
+        return rows.stream()
+                .map(Arguments::of);
+    }
+
+    private static List<Map<String, String>> readExcel(String filePath) {
+
+        List<Map<String, String>> testData = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+
+            DataFormatter formatter = new DataFormatter();
+
+            Row headerRow = sheet.getRow(0);
+
+            List<String> headers = new ArrayList<>();
+
+            for (Cell cell : headerRow) {
+                headers.add(formatter.formatCellValue(cell).trim());
+            }
+
+            for (int rowIndex = 1;
+                 rowIndex <= sheet.getLastRowNum();
+                 rowIndex++) {
+
+                Row row = sheet.getRow(rowIndex);
+
+                if (row == null || isEmptyRow(row)) {
+                    continue;
+                }
+
+                Map<String, String> rowData = new LinkedHashMap<>();
+
+                for (int colIndex = 0;
+                     colIndex < headers.size();
+                     colIndex++) {
+
+                    Cell cell = row.getCell(
+                            colIndex,
+                            Row.MissingCellPolicy.CREATE_NULL_AS_BLANK
+                    );
+
+                    rowData.put(
+                            headers.get(colIndex),
+                            formatter.formatCellValue(cell)
+                    );
+                }
+
+                testData.add(rowData);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Failed to read Excel: " + filePath, e);
+        }
+
+        return testData;
+    }
+
+    private static boolean isEmptyRow(Row row) {
+
+        for (Cell cell : row) {
+            if (cell.getCellType() != CellType.BLANK &&
+                    !cell.toString().trim().isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+---------------------------------------------
+
 public static List<DBComparisonData> getDBComparisonData(
         String fileName,
         String sheetName) {
