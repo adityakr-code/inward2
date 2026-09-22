@@ -1,0 +1,28 @@
+import com.azure.identity.DefaultAzureCredential;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.KeyVaultSecret;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
+
+public class KeyVaultUtil {
+
+    private static final String KEY_VAULT_URL =
+            "https://YOUR-KEY-VAULT-NAME.vault.azure.net/";
+
+    private static final SecretClient secretClient;
+
+    static {
+        DefaultAzureCredential credential =
+                new DefaultAzureCredentialBuilder().build();
+
+        secretClient = new SecretClientBuilder()
+                .vaultUrl(KEY_VAULT_URL)
+                .credential(credential)
+                .buildClient();
+    }
+
+    public static String getSecret(String secretName) {
+        KeyVaultSecret secret = secretClient.getSecret(secretName);
+        return secret.getValue();
+    }
+}
